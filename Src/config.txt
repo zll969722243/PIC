@@ -1,0 +1,59 @@
+用于配置哪些脚干什么事情
+
+//=================================================================================
+GP0:用于通用输出;
+GP2:
+
+GP3、GP4、GP5:用于测试功能号输入;
+
+//=================================================================================
+bit 13-12 BG1:BG0:BOD 和 POR 电压的带隙校准位
+	00 = 最低带隙电压
+	11 = 最高带隙电压
+	
+bit 11-9 未用位:读作 0
+
+bit 8 CPD:数据代码保护位
+	1 = 禁止数据存储器代码保护
+	0 = 使能数据存储器代码保护
+	
+bit 7 CP:代码保护位
+	1 = 禁止程序存储器代码保护
+	0 = 使能程序存储器代码保护
+	
+bit 6 BODEN:欠压检测使能位
+	1 = 使能 BOD
+	0 = 禁止 BOD
+	
+bit 5 MCLRE:GP3/MCLR 引脚功能选择
+	1 = GP3/MCLR 引脚功能为 MCLR
+	0 = GP3/MCLR 引脚功能为数字 I/O,MCLR 内部连接到 VDD
+	
+bit 4 PWRTE:上电延时定时器使能位
+	1 = 禁止 PWRT
+	0 = 使能 PWRT
+	
+bit 3 WDTE:看门狗定时器使能位
+	1 = 使能 WDT
+	0 = 禁止 WDT
+	
+bit 2-0 FOSC2:FOSC0:振荡器选择位
+	111 = RC振荡器:GP4/OSC2/CLKOUT引脚为CLKOUT功能,GP5/OSC1/CLKIN 引脚上连接RC
+	110 = RC振荡器:GP4/OSC2/CLKOUT引脚为I/O功能,GP5/OSC1/CLKIN 引脚连接RC
+	101 = INTOSC振荡器:GP4/OSC2/CLKOUT引脚为CLKOUT功能,GP5/OSC1/CLKIN引脚为I/O功能
+	100 = INTOSC振荡器:GP4/OSC2/CLKOUT引脚为I/O功能,GP5/OSC1/CLKIN 引脚为I/O功能
+	011 = EC:GP4/OSC2/CLKOUT引脚为I/O功能,GP5/OSC1/CLKIN 引脚上为 CLKIN
+	010 = HS振荡器:GP4/OSC2/CLKOUT和GP5/OSC1/CLKIN 引脚连接高速晶振/谐振器
+	001 = XT振荡器:GP4/OSC2/CLKOUT和GP5/OSC1/CLKIN 引脚连接晶振/谐振器
+	001 = LP振荡器:GP4/OSC2/CLKOUT和GP5/OSC1/CLKIN 引脚上连接低功耗晶振
+
+__CONFIG(0x3194)即：
+0011 0001 1001 0100
+最高带隙电压
+禁止数据存储器代码保护
+禁止程序存储器代码保护
+禁止 BOD
+GP3/MCLR引脚功能为数字I/O,MCLR内部连接到VDD
+禁止 PWRT
+禁止 WDT
+INTOSC振荡器:GP4/OSC2/CLKOUT引脚为I/O功能, GP5/OSC1/CLKIN 引脚为I/O功能

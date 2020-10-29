@@ -58,7 +58,7 @@ void interrupt tmer0(void)
 		cnt++;
 		TMR0=156;
 		T0IF=0;	
-		if(cnt==39*5)//39 * n,则为n秒的定时器
+		if(cnt==39*TMR0_DELAY_S)//39 * n,则为n秒的定时器,TMR0_DELAY_S在common.h中配置
 		{
 			led_out = ~led_out;
 			cnt = 0;

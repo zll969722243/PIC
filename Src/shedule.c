@@ -3,12 +3,12 @@
 
 
 typedef byte (*pfun)(word);
-typedef struct _funcnum2proc
+typedef struct _func_num2proc
 {
-	word funcnum;
+	em_fun_num funcnum;
 	pfun curproc;
 	pfun newproc;
-}funcnum2proc;
+}func_num2proc;
 
 //static funcnum2proc shedule_tbl[]=
 //{
@@ -21,7 +21,7 @@ typedef struct _funcnum2proc
 //	NULL_FUN_NUM,cur_def,new_timer0
 //};
 
-static funcnum2proc shedule_tbl[]=
+static func_num2proc shedule_tbl[]=
 {
 	TIMER0_FUN_NUM,cur_timer0,new_timer0,
 	TIMER1_FUN_NUM,cur_timer0,new_timer0,
@@ -54,23 +54,26 @@ byte shedule(word new_funcnum)
 {
 	static word cur_funcnum_index = 0;
 	word index = 0;
-	shedule_tbl[0].newproc(0);
-//	for(;index<sizeof(shedule_tbl)/sizeof(word);index++)
-//	{
-//		if(new_funcnum == shedule_tbl[index].funcnum)
-//		{
-//			
-//			if(!(shedule_tbl[cur_funcnum_index].curproc(0))) 
-//				return 0;//当前的测试模块自己把屁股擦干净
-//				
-//			if(!shedule_tbl[index].newproc(0)) 
-//				return 0;//开启新的模块测试
-//			
-//			cur_funcnum_index = index;//update
-//			
-//			break;
-//		}
-//	}
+	//new_funcnum=0;
+	
+	if(new_funcnum>=MAX_FUN_NUM)
+		return 0;
+	
+	for(;index<(sizeof(shedule_tbl)/sizeof(func_num2proc));index++)
+	{
+		if(new_funcnum == (word)shedule_tbl[index].funcnum)
+		{
+			if(!(shedule_tbl[cur_funcnum_index].curproc(0))) 
+				return 0;//当前的测试模块自己把屁股擦干净
+				
+			if(!shedule_tbl[index].newproc(0)) 
+				return 0;//开启新的模块测试
+			
+			cur_funcnum_index = index;//update
+			
+			break;
+		}
+	}
 	
 	return 1;
 }

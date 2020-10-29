@@ -1,6 +1,6 @@
 #include "timer.h"
 
-#define     led_out		GP0
+#define led_out		GP0
 
 byte test_start()
 {
@@ -58,7 +58,7 @@ void interrupt tmer0(void)
 		cnt++;
 		TMR0=156;
 		T0IF=0;	
-		if(cnt==39)//39 * n,则为n秒的定时器
+		if(cnt==39*5)//39 * n,则为n秒的定时器
 		{
 			led_out = ~led_out;
 			cnt = 0;

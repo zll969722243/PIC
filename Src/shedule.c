@@ -10,17 +10,27 @@ typedef struct _funcnum2proc
 	pfun newproc;
 }funcnum2proc;
 
+//static funcnum2proc shedule_tbl[]=
+//{
+//	TIMER0_FUN_NUM,cur_timer0,new_timer0,
+//	TIMER1_FUN_NUM,cur_timer1,new_timer0,
+//	CMP_FUN_NUM,cur_cmp,new_timer0,
+//	MEM_FUN_NUM,cur_mem,new_timer0,
+//	EEPROM_FUN_NUM,cur_eeprom,new_timer0,
+//	INST_FUN_NUM,cur_inst,new_timer0,
+//	NULL_FUN_NUM,cur_def,new_timer0
+//};
+
 static funcnum2proc shedule_tbl[]=
 {
 	TIMER0_FUN_NUM,cur_timer0,new_timer0,
-	TIMER1_FUN_NUM,cur_timer1,new_timer0,
-	CMP_FUN_NUM,cur_cmp,new_timer0,
-	MEM_FUN_NUM,cur_mem,new_timer0,
-	EEPROM_FUN_NUM,cur_eeprom,new_timer0,
-	INST_FUN_NUM,cur_inst,new_timer0,
-	NULL_FUN_NUM,cur_def,new_timer0
+	TIMER1_FUN_NUM,cur_timer0,new_timer0,
+	CMP_FUN_NUM,cur_timer0,new_timer0,
+	MEM_FUN_NUM,cur_timer0,new_timer0,
+	EEPROM_FUN_NUM,cur_timer0,new_timer0,
+	INST_FUN_NUM,cur_timer0,new_timer0,
+	NULL_FUN_NUM,cur_timer0,new_timer0
 };
-
 
 byte init_shedule(void)
 {
@@ -42,22 +52,27 @@ byte need_shedule(word new_funcnum)
 
 byte shedule(word new_funcnum)
 {
-	word ret = 0;
-	static word cur_funcnum = NULL_FUN_NUM;
-	
+	static word cur_funcnum_index = 0;
 	word index = 0;
-	for(;index<sizeof(shedule_tbl)/sizeof(word);index++)
-	{
-		if(new_funcnum == shedule_tbl[index].funcnum)
-		{
-			if(!shedule_tbl[cur_funcnum].curproc(0)) return 0;//当前的测试模块自己把屁股擦干净
-			if(!shedule_tbl[new_funcnum].newproc(0)) return 0;//开启新的模块测试
-			
-			cur_funcnum = new_funcnum;//update
-		}
-	}
+	shedule_tbl[0].newproc(0);
+//	for(;index<sizeof(shedule_tbl)/sizeof(word);index++)
+//	{
+//		if(new_funcnum == shedule_tbl[index].funcnum)
+//		{
+//			
+//			if(!(shedule_tbl[cur_funcnum_index].curproc(0))) 
+//				return 0;//当前的测试模块自己把屁股擦干净
+//				
+//			if(!shedule_tbl[index].newproc(0)) 
+//				return 0;//开启新的模块测试
+//			
+//			cur_funcnum_index = index;//update
+//			
+//			break;
+//		}
+//	}
 	
-	return ret;
+	return 1;
 }
 
 

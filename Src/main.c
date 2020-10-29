@@ -1,6 +1,8 @@
 #include "main.h"
 #include "utils.h"
 
+__CONFIG(0x31B4);
+
 void main(void)
 {
 	init();
@@ -8,7 +10,11 @@ void main(void)
 	{
 		clrwdt();
 		byte funcnum = get_func_num();
-		if(need_shedule(funcnum)) shedule(funcnum);
+		
+		if(need_shedule(funcnum)) 
+			shedule(funcnum);
+			
+		clrwdt();
 		delay(100);		
 	}
 }

@@ -8,11 +8,13 @@
 //0:fail;
 byte init_eeprom(void);
 
-byte start_eeprom();
+byte read_eeprom(byte addr,byte *out);
 
-byte stop_eeprom();
+byte write_eeprom(byte addr,byte data);
 
-byte uninit_eeprom();
+byte test_write_read(byte p);
+
+byte uninit_eeprom(void);
 
 
 #endif 

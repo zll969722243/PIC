@@ -1,6 +1,6 @@
 #include "timer.h"
 
-#define led_out		GP0
+#define led_out		GP2
 
 byte test_start()
 {
@@ -50,6 +50,26 @@ byte init_timer0(void)
 	return 1;	
 }
 
+
+
+//void interrupt tmer0(void)
+//{
+//	static byte cnt = 0;
+//	if(T0IF==1)
+//	{
+//		cnt++;
+//		TMR0=156;
+//		T0IF=0;	
+//		if(cnt==39*TMR0_DELAY_S)//39 * n,则为n秒的定时器,TMR0_DELAY_S在common.h中配置
+//		{
+//			led_out = ~led_out;
+//			cnt = 0;
+//		}
+//	}
+//}
+
+extern byte g_func_num_4_dbg;
+
 void interrupt tmer0(void)
 {
 	static byte cnt = 0;
@@ -58,7 +78,7 @@ void interrupt tmer0(void)
 		cnt++;
 		TMR0=156;
 		T0IF=0;	
-		if(cnt==39*TMR0_DELAY_S)//39 * n,则为n秒的定时器,TMR0_DELAY_S在common.h中配置
+		if(cnt==39*g_func_num_4_dbg)//39 * n,则为n秒的定时器
 		{
 			led_out = ~led_out;
 			cnt = 0;

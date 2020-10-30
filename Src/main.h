@@ -6,4 +6,4 @@
 #define  clrwdt()   asm("CLRWDT")
 
 byte init(void);
-word get_func_num(void);
+byte get_func_num(void);

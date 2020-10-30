@@ -4,29 +4,29 @@
 #include "common.h"
 
 byte init_shedule(void);
-byte shedule(word funcnum);
-byte need_shedule(word new_funcnum);
+byte shedule(byte funcnum);
+byte need_shedule(byte new_funcnum);
+byte exec_proc(byte funcnum,byte isnew,byte p);
 
+byte cur_timer0(byte p);
+byte new_timer0(byte p);
 
-byte cur_timer0(word p);
-byte new_timer0(word p);
+byte cur_timer1(byte p);
+byte new_timer1(byte p);
 
-byte cur_timer1(word p);
-byte new_timer1(word p);
+byte cur_cmp(byte p);
+byte new_cmp(byte p);
 
-byte cur_cmp(word p);
-byte new_cmp(word p);
+byte cur_mem(byte p);
+byte new_mem(byte p);
 
-byte cur_mem(word p);
-byte new_mem(word p);
+byte cur_eeprom(byte p);
+byte new_eeprom(byte p);
 
-byte cur_eeprom(word p);
-byte new_eeprom(word p);
+byte cur_inst(byte p);
+byte new_inst(byte p);
 
-byte cur_inst(word p);
-byte new_inst(word p);
-
-byte cur_def(word p);
-byte new_def(word p);
+byte cur_def(byte p);
+byte new_def(byte p);
 
 #endif

@@ -43,6 +43,8 @@ byte test_write_read(byte p)
 	byte addr = 0;
 	byte wdata = 0,rdata = 0;
 	
+	LED_OUT = LED_OFF;
+	
 	while(addr<128)
 	{
 		wdata = addr;
@@ -58,6 +60,7 @@ byte test_write_read(byte p)
 		addr++;
 	}
 	
+	LED_OUT = LED_ON;
 	return 1;
 }
 

@@ -1,7 +1,5 @@
 #include "timer.h"
 
-#define led_out		GP2
-
 byte test_start()
 {
 	return 0;
@@ -16,7 +14,7 @@ byte uninit_timer0()
 {
 	T0IE = 0;	//禁止TMR0溢出中断
 	T0IF = 0;   //清除T0中断标志
-	
+	GIE  = 0;   //总中断禁止
 	return 1;
 }
 
@@ -36,7 +34,7 @@ byte uninit_timer0()
 byte init_timer0(void)
 {
 	OPTION_REG 	= 0X07;             
-    led_out 	= 1;         
+    LED_OUT		= LED_OFF;         
 	
 	//CLKOUT--->4M---4分频--->1M---256分频--->3906.25Hz
 	//(0x100-x) * n = 3906.25
@@ -50,7 +48,38 @@ byte init_timer0(void)
 	return 1;	
 }
 
+byte uninit_timer1()
+{
+	TMR1ON=0;       //停止启动T1计时
+	TMR1IF=0;       //清除T1中断标志	
+	TMR1IE=0;       //T1中断禁止
+	PEIE  =0;       //使能禁止外围功能
+	GIE   =0;       //总中断使能
+	
+	return 1;
+}
 
+byte init_timer1(void)
+{
+	OPTION_REG 	= 0X07;             
+    LED_OUT 	= LED_OFF;         
+	
+	GIE=1;                  //总中断使能
+	T1CON=0X34;             //8分频,Fosc/4
+	TMR1IF=0;               //清除T1中断标志
+	
+	//4M/4 = 1M = 10^6
+	//10^6 / 8 = 125000
+	//65536 - 12500 = 53036
+	TMR1L=44;             //定时器初始值
+	TMR1H=207;
+	
+	PEIE=1;                 //使能外围功能
+	TMR1IE=1;               //T1中断使能
+	TMR1ON=1;               //启动T1计时
+ 	
+	return 1;	
+}
 
 //void interrupt tmer0(void)
 //{
@@ -72,16 +101,32 @@ extern byte g_func_num_4_dbg;
 
 void interrupt tmer0(void)
 {
-	static byte cnt = 0;
-	if(T0IF==1)
+	static byte cnt_tmer0 = 0;
+	static byte cnt_tmer1 = 0;
+	if((T0IF==1) && (T0IE==1))
 	{
-		cnt++;
+		cnt_tmer0++;
 		TMR0=156;
-		T0IF=0;	
-		if(cnt==39*g_func_num_4_dbg)//39 * n,则为n秒的定时器
+		T0IF=0;
+		
+		if(cnt_tmer0==39*1)//39 * n,则为n秒的定时器
 		{
-			led_out = ~led_out;
-			cnt = 0;
+			LED_OUT = ~LED_OUT;
+			cnt_tmer0 = 0;
+		}
+	}
+	else if((TMR1IF==1) && (TMR1IE==1))
+	{
+		cnt_tmer1++;
+		TMR1L=44;
+		TMR1H=207;
+		TMR1IF=0;
+		
+		if(cnt_tmer1==10*2)//39 * n,则为n秒的定时器
+		{
+			//LED_OUT = ~LED_OUT;
+			GP1 = ~GP1;
+			cnt_tmer1 = 0;
 		}
 	}
 }

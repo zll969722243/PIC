@@ -1,9 +1,8 @@
 #include "shedule.h"
 #include "timer.h"
 #include "eeprom.h"
+#include "cmp.h"
 
-//for debug
-byte  g_func_num_4_dbg=0;
 
 #if 0
 
@@ -79,7 +78,9 @@ byte shedule(byte new_funcnum)
 byte shedule(byte new_funcnum)
 {
 	static byte cur_funcnum = NULL_FUN_NUM;
-	new_funcnum=4;
+
+//	if(new_funcnum==7) new_funcnum=0;
+//	else if (new_funcnum==3) new_funcnum=1;
 
 	if(new_funcnum>=MAX_FUN_NUM)
 		return 0;
@@ -90,6 +91,7 @@ byte shedule(byte new_funcnum)
 		return 0;
 		
 	cur_funcnum = new_funcnum;//update
+
 	return 1;
 }
 
@@ -99,37 +101,32 @@ byte exec_proc(byte funcnum,byte isnew,byte p)
 	{
 		case TIMER0_FUN_NUM:
 		{
-			g_func_num_4_dbg = funcnum+1;
 			return (isnew ? new_timer0(p): cur_timer0(p));
 		}
 		case TIMER1_FUN_NUM:
 		{
-			g_func_num_4_dbg = funcnum+1;
 			return (isnew ? new_timer1(p): cur_timer1(p));
 		}
 		case CMP_FUN_NUM:
 		{
-			g_func_num_4_dbg = funcnum+1;
 			return (isnew ? new_cmp(p): cur_cmp(p));
 		}
 		case MEM_FUN_NUM:
 		{
-			g_func_num_4_dbg = funcnum+1;
-			return (isnew ? new_mem(p): cur_mem(p));
+			//return (isnew ? new_mem(p): cur_mem(p));
+			return (isnew ? new_timer0(p): cur_timer0(p));
 		}
 		case EEPROM_FUN_NUM:
 		{
-			g_func_num_4_dbg = funcnum+1;
 			return (isnew ? new_eeprom(p): cur_eeprom(p));
 		}
 		case INST_FUN_NUM:
 		{
-			g_func_num_4_dbg = funcnum+1;
-			return (isnew ? new_inst(p): cur_inst(p));
+			//return (isnew ? new_inst(p): cur_inst(p));
+			return (isnew ? new_timer1(p): cur_timer1(p));
 		}
 		case NULL_FUN_NUM:	
 		{
-			g_func_num_4_dbg = funcnum+1;
 			return (isnew ? new_def(p): cur_def(p));
 		}
 		default:
@@ -150,12 +147,12 @@ byte new_timer0(byte p)
 
 byte cur_timer1(byte p)
 {
-	return uninit_timer0();
+	return uninit_timer1();
 }
 
 byte new_timer1(byte p)
 {
-	return init_timer0();
+	return init_timer1();
 }
 
 
@@ -166,18 +163,18 @@ byte cur_cmp(byte p)
 
 byte new_cmp(byte p)
 {
-	return init_timer0();
+	return init_cmp();
 }
 
 
 byte cur_mem(byte p)
 {
-	return uninit_timer0();
+	return uninit_cmp();
 }
 
 byte new_mem(byte p)
 {
-	return init_timer0();
+	return 1;
 }
 
 
@@ -200,7 +197,7 @@ byte new_eeprom(byte p)
 
 byte cur_inst(byte p)
 {
-	return uninit_timer0();
+	return 1;
 }
 
 byte new_inst(byte p)
@@ -211,7 +208,7 @@ byte new_inst(byte p)
 
 byte cur_def(byte p)
 {
-	return uninit_timer0();
+	return 1;
 }
 
 byte new_def(byte p)
